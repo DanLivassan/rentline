@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button, Col, Row } from "reactstrap";
 import InputValidated from "../../components/inputs/InputValidated";
 import { emailValidation } from "../../utils/forms-validations";
+import * as yup from "yup";
 
 const Fields = [
   {
