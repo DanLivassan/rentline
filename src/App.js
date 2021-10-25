@@ -1,24 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import AdminLayout from './layouts/Admin';
+import routes from './admin.routes';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+
+import { createBrowserHistory } from 'history';
+const hist = createBrowserHistory()
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router history={hist}>
+      <Switch>
+        <Route path="/admin" render={(props) => {
+          props.routes = routes
+          return <AdminLayout {...props} />
+        }} />
+        <Redirect to="/admin/clientes" />
+      </Switch>
+    </Router>
   );
 }
 
