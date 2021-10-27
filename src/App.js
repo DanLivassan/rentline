@@ -14,7 +14,7 @@ function App() {
           props.routes = routes
           return <AdminLayout {...props} />
         }} />
-        <Redirect to="/admin/clientes" />
+        <Redirect to="/admin/usuario" />
       </Switch>
     </Router>
   );

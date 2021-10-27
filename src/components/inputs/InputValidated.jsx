@@ -52,11 +52,13 @@ const InputValidated = (props) => {
     select,
     selectOptions,
     onSelect,
+    setValue,
     asyncSelect,
     asyncOptions,
     mask,
     dependent,
     dependentOptions,
+    dependentSelect,
     multiple,
   } = props;
   let input = null;
@@ -98,18 +100,21 @@ const InputValidated = (props) => {
       </FormGroup>
     );
   } else if (select) {
-    let options = dependent ? dependentOptions : selectOptions;
+    let options = dependent ? dependentOptions[name] : selectOptions;
     options = asyncSelect ? asyncOptions[name] : options;
     const onChange = dependent ? (a, b) => {} : onSelect;
     input = (
       <FormGroup>
         <Label>{labelText}</Label>
-        <Input
+        <select
+          className={`form-control select ${errors[name] && "is-invalid"}`}
           type="select"
-          name={name}
-          innerRef={register(validation)}
-          invalid={errors[name] ? true : false}
-          onChange={onChange}
+          name={"select_" + name}
+          invalid={errors[name] ? "invalid" : undefined}
+          onChange={(e) => {
+            setValue(name, e.target.value);
+            onChange(e, dependentSelect);
+          }}
           multiple={multiple}
         >
           {options.map((option) => (
@@ -117,7 +122,14 @@ const InputValidated = (props) => {
               {option.label}
             </option>
           ))}
-        </Input>
+        </select>
+        <input
+          name={name}
+          onChange={() => {}}
+          {...register(name, validation)}
+          type="text"
+          hidden
+        ></input>
         {errors[name] ? (
           <FormFeedback>{errors[name]["message"]}</FormFeedback>
         ) : null}

@@ -62,12 +62,17 @@ const Fields = [
     placeholder: "observações...",
   },
   {
-    name: "perfil",
-    labelText: "Perfil",
+    name: "usuario_role",
+    labelText: "Grupo de usuários",
     inputType: "text",
-    validation: {
-      required: "Este campo não pode ser vazio",
-    },
+    validation: { required: "Escolha um tipo de usuário" },
+    placeholder: "Selecione...",
+    selectOptions: [
+      { label: "Selecione", value: "" },
+      { label: "Admin", value: "admin" },
+      { label: "User", value: "user" },
+    ],
+    select: true,
   },
 ];
 
@@ -108,7 +113,6 @@ const Usuario = () => {
           <Button type="submit" color="primary">
             Salvar
           </Button>
-          <Button onClick={() => console.log(errors, getValues())}> Err</Button>
         </Form>
       </div>
     </div>

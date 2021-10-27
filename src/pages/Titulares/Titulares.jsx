@@ -1,9 +1,11 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { get, useForm } from "react-hook-form";
 import { Form, Button, Col, Row } from "reactstrap";
 import InputValidated from "../../components/inputs/InputValidated";
+import { getAddressStates } from "../../utils/address/address_helpers";
+import { states_and_cities } from "../../utils/address/brazil/states_and_cities";
 import { emailValidation, CPFValidation } from "../../utils/forms-validations";
-
+const estados = getAddressStates(states_and_cities);
 const Fields = [
   {
     name: "cpf_cnpj",
@@ -27,7 +29,7 @@ const Fields = [
     placeholder: "email@mail.com",
   },
   {
-    name: "Nome",
+    name: "nome",
     labelText: "Nome",
     inputType: "text",
     validation: {
@@ -47,32 +49,40 @@ const Fields = [
     placeholder: "Endereço",
   },
   {
-    name: "cidade",
-    labelText: "Cidade",
-    inputType: "text",
-    validation: {
-      required: "Este campo não pode ser vazio",
-      minLength: { value: 6, message: "Minímo de 6 letras" },
-    },
-    placeholder: "cidade",
-  },
-  {
     name: "uf",
     labelText: "UF",
+    select: true,
+    selectOptions: estados
+      ? estados.map((estado) => {
+          return { label: estado.name, value: estado.uf };
+        })
+      : [],
     inputType: "text",
     validation: {
       required: "Este campo não pode ser vazio",
-      minLength: { value: 6, message: "Minímo de 6 letras" },
     },
     placeholder: "Estado",
+    dependentSelect: "cidade",
   },
+  {
+    name: "cidade",
+    labelText: "Cidade",
+    select: true,
+    dependent: true,
+    dependentOptions: { cidade: [{ label: "Selecione um estado", value: "" }] },
+    inputType: "text",
+    validation: {
+      required: "Este campo não pode ser vazio",
+    },
+  },
+
   {
     name: "bairro",
     labelText: "Bairro",
     inputType: "text",
     validation: {
       required: "Este campo não pode ser vazio",
-      minLength: { value: 6, message: "Minímo de 6 letras" },
+      minLength: { value: 3, message: "Minímo de 3 letras" },
     },
     placeholder: "Bairro",
   },
@@ -83,28 +93,45 @@ const Titulares = () => {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm();
 
+  const [state, setState] = useState({ fields: Fields });
+  const onSelect = (e, dependentSelect) => {
+    let cities = states_and_cities["estados"].find((state) => {
+      return state.sigla === e.target.value;
+    });
+    cities = cities["cidades"].map((city) => {
+      return { label: city, value: city };
+    });
+    state.fields[5].dependentOptions = {
+      cidade: cities,
+    };
+
+    setState({ fields: state.fields });
+  };
   const onSubmit = (data) => {
     console.log(data);
   };
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <h3 className="panel-title">Usuário</h3>
+        <h3 className="panel-title">Titulares</h3>
       </div>
       <div className="panel-body">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row>
-            {Fields.map((props, key) => {
+            {state.fields.map((props, key) => {
               return (
                 <Col key={key} className="pl-1" md="3">
                   <InputValidated
                     {...{
-                      ...props,
                       errors,
                       register,
+                      onSelect,
+                      setValue,
+                      ...props,
                     }}
                   />
                 </Col>
