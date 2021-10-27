@@ -60,6 +60,7 @@ const InputValidated = (props) => {
     dependentOptions,
     dependentSelect,
     multiple,
+    step,
   } = props;
   let input = null;
   let [inputValue, setInputValue] = useState("");
@@ -71,6 +72,7 @@ const InputValidated = (props) => {
           className={`form-control ${errors[name] && "is-invalid"}`}
           placeholder={placeholder}
           type={inputType}
+          step={step}
           name={name}
           invalid={errors[name] ? "invalid" : undefined}
           {...register(name, validation)}
