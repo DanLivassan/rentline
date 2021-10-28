@@ -5,21 +5,27 @@ import * as yup from "yup";
 import { CPFValidation, emailValidation } from "../../utils/forms-validations";
 import useYupValidationResolver from "../../utils/validationResolver";
 const validationSchema = yup.object({
-  nome: yup.string().required("danilo"),
-  cpf_cnpf: yup.string().matches(CPFValidation),
-  data_nascimento: yup.date(),
+  nome: yup.string().required("O nome é requerido"),
+  cpf_cnpf: yup
+    .string()
+    .matches(CPFValidation.pattern.value, CPFValidation.pattern.message),
+  data_nascimento: yup.date("Deve ser uma data"),
   celular: yup.string(),
-  email1: yup.string().matches(emailValidation.value),
-  email2: yup.string().matches(emailValidation.value),
-  endereco: yup.string().required(),
-  bairro: yup.string().required(),
-  cep: yup.string().required(),
-  cidade: yup.string().required(),
-  uf: yup.string().required(),
-  gestor_contrato: yup.string().required(),
+  email1: yup
+    .string()
+    .matches(emailValidation.pattern.value, emailValidation.pattern.message),
+  email2: yup
+    .string()
+    .matches(emailValidation.pattern.value, emailValidation.pattern.message),
+  endereco: yup.string().required("Endereço é requerido"),
+  bairro: yup.string().required("Bairro é requerido"),
+  cep: yup.string().required("CEP é requerido"),
+  cidade: yup.string().required("Cidade é requerida"),
+  uf: yup.string().required("UF é requerida"),
+  gestor_contrato: yup.string().required("Gestor é requerido"),
   observacoes: yup.string(),
-  usuario: yup.string().required(),
-  senha: yup.string().required(),
+  usuario: yup.string().required("Usuário requerido"),
+  senha: yup.string().required("Senha requerida"),
   perfil: yup.string(),
 });
 
