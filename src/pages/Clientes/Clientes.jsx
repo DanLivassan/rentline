@@ -38,7 +38,6 @@ const Clientes = () => {
     register,
     handleSubmit,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm({ resolver });
 
@@ -59,6 +58,7 @@ const Clientes = () => {
                     className="form-control"
                     name={field}
                     type="text"
+                    {...register(field)}
                   ></input>
                   <p style={{ color: "red" }}>
                     {errors[field] && errors[field]?.message}
