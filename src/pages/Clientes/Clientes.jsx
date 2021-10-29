@@ -30,7 +30,6 @@ const validationSchema = yup.object({
 });
 
 const Fields = Object.keys(validationSchema.fields);
-console.log(Fields);
 const Clientes = () => {
   const resolver = useYupValidationResolver(validationSchema);
 
@@ -50,9 +49,9 @@ const Clientes = () => {
       <div className="panel-body">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row>
-            {Fields.map((field) => {
+            {Fields.map((field, key) => {
               return (
-                <Col className="col-md-4">
+                <Col key={key} className="col-md-4">
                   <Label>{field[0].toUpperCase() + field.slice(1)}</Label>
                   <input
                     className="form-control"
